@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  docker-android-x86-8.1-build:
+  build_8:
     runs-on: ubuntu-latest
 
     steps:
