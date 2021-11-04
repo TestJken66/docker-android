@@ -81,11 +81,8 @@ jobs:
           adb devices |true
           echo "模拟器查看"
           emulator -list-avds |true
-
-          docker exec -it ac  /bin/bash && \
-          adb kill-server|true && \
-          adb start-server|true && \
-          adb devices|true && \
+          docker exec -it ac  /bin/bash
+          adb devices
           exit
 
 
