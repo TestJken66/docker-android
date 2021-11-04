@@ -67,11 +67,16 @@ jobs:
           sudo docker container  ps -a
           echo "容器=====运行====列表"
           sudo docker container  ps
-          curl 127.0.0.1:6080
+          #curl 127.0.0.1:6080
           echo "设备查看"
           adb devices |true
           echo "模拟器查看"
           emulator -list-avds|true
+
+      - name: curl
+        shell: bash
+        continue-on-error: true
+        run: curl 127.0.0.1:6080
 
       - name: Test Device
         shell: bash
