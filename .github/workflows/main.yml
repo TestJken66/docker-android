@@ -23,3 +23,50 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
+
+      - name: Get df
+        shell: bash
+        run: |
+          df -h
+
+
+      - name: Get ip
+        shell: bash
+        run: |
+          echo "================================================即将测试IP地址========================"
+          ip=`ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|awk '{print $2}'|tr -d "addr:"`
+          echo "方式一获取ip： $ip"
+          ip2=$(ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|awk '{print $2}'|tr -d "addr:")
+          echo "方式二获取ip： $ip2"
+          curl ip.sb
+
+      - name: Install apps
+        shell: bash
+        run: |
+          echo "=======================开始安装软件======================="
+          # https://www.jianshu.com/p/da1c7dc4217a
+          sudo apt-get update
+          sudo apt-get -y install net-tools apt-transport-https ca-certificates curl software-properties-common python python3.8
+          curl -fsSL https://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo apt-key add -
+          sudo add-apt-repository "deb [arch=amd64] https://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable"
+          sudo apt-get -y update
+          sudo apt-get -y install docker-ce cpu-checker
+          ### export PATH
+          export PATH=$PATH:${ANDROID_HOME}/emulator:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/build-tools/30.0.3:${ANDROID_HOME}/build-tools/30.0.3/lld-bin:${ANDROID_HOME}/ndk/23.0.7599858
+
+      - name: Build budtmo/docker-android-x86-8.1:1
+        shell: bash
+        run: |
+          sudo docker build -t budtmo/docker-android-x86-8.1:1 --build-arg TOKEN= --build-arg ANDROID_VERSION=8.1 --build-arg API_LEVEL=27 --build-arg PROCESSOR=x86 --build-arg SYS_IMG=x86 --build-arg IMG_TYPE=google_apis --build-arg BROWSER=chrome --build-arg CHROME_DRIVER=2.33 --build-arg APP_RELEASE_VERSION=1 -f docker/Emulator_x86 .
+          ### export PATH
+          export PATH=$PATH:${ANDROID_HOME}/emulator:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/build-tools/30.0.3:${ANDROID_HOME}/build-tools/30.0.3/lld-bin:${ANDROID_HOME}/ndk/23.0.7599858
+          echo "image=========列表"
+          sudo docker image ls
+          echo "容器====所有=====列表"
+          sudo docker container  ps -a
+          echo "容器=====运行====列表"
+          sudo docker container  ps
+          echo "设备查看"
+          adb devices |true
+          echo "模拟器查看"
+          emulator -list-avds|true

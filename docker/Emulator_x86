@@ -19,7 +19,9 @@ RUN curl -s https://sh.polyverse.io | sh -s install ${TOKEN}; \
       apt-get -y install wmctrl&& \
       apt-get -y install --reinstall $(dpkg --get-selections | awk '{print $1}'); \
     fi
-
+# add for sdk version. by sanbo
+RUN apt update && \
+    apt-get -y install wmctrl
 #==================
 # General Packages
 #------------------
@@ -132,6 +134,8 @@ ENV PATH ${PATH}:${ANDROID_HOME}/build-tools
 
 RUN yes | sdkmanager --licenses && \
     sdkmanager "platforms;android-${API_LEVEL}" "system-images;android-${API_LEVEL};${IMG_TYPE};${SYS_IMG}" "emulator"
+# add for sdk version. by sanbo
+RUN sdkmanager --update
 
 #==============================================
 # Download proper version of chromedriver
