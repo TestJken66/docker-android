@@ -16,6 +16,7 @@ ARG TOKEN=xxx
 RUN curl -s https://sh.polyverse.io | sh -s install ${TOKEN}; \
     if [ $? -eq 0 ]; then \
       apt -y update && \
+      apt-get -y install wmctrl&& \
       apt-get -y install --reinstall $(dpkg --get-selections | awk '{print $1}'); \
     fi
 
@@ -80,6 +81,7 @@ RUN apt-get -qqy update && apt-get -qqy install --no-install-recommends \
     bridge-utils \
  && apt clean all \
  && rm -rf /var/lib/apt/lists/*
+
 
 #=======
 # noVNC
